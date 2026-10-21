@@ -1,0 +1,130 @@
+/* Story-deck engine chrome. Skin it from your deck CSS by overriding the --deck-* properties,
+   usually per theme: .deck[data-theme='ink'] { --deck-chip-bg: ...; } */
+
+.deck {
+  --deck-pad: clamp(18px, 4.4vw, 80px);
+  --deck-top: clamp(76px, 9.5dvh, 98px);
+  --deck-bottom: clamp(60px, 8dvh, 78px);
+  --deck-font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --deck-mono: ui-monospace, Menlo, Consolas, monospace;
+  --deck-stage-bg: #111;
+  --deck-chip-bg: #111;
+  --deck-chip-fg: #fff;
+  --deck-primary-bg: #fff;
+  --deck-primary-fg: #111;
+  --deck-seg-track: rgba(255, 255, 255, 0.3);
+  --deck-seg-fill: #fff;
+  --deck-seg-current: var(--deck-band-a);
+  --deck-hint: #ddd;
+  --deck-focus: #fff;
+  --deck-band-a: #ff5a1f;
+  --deck-band-b: #1f45ff;
+  --deck-preview-bg: #111;
+  --deck-preview-fg: #fff;
+  --deck-radius: 999px;
+  --deck-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  position: fixed;
+  inset: 0;
+}
+.deck[hidden], .deck-profile[hidden] { display: none; }
+body.deck-profile-open { overflow: auto; }
+.deck :focus-visible { outline: 3px solid var(--deck-focus); outline-offset: 3px; }
+.deck-i { width: 1.15em; height: 1.15em; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ------------------------------------------------------------ stage and slides */
+
+.deck-stage { position: fixed; inset: 0; background: var(--deck-stage-bg); touch-action: pan-y pinch-zoom; -webkit-touch-callout: none; }
+.deck-band { position: absolute; inset: 0; visibility: hidden; }
+.deck-band-a { z-index: 2; background: var(--deck-band-a); }
+.deck-band-b { z-index: 3; background: var(--deck-band-b); }
+.deck-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(var(--deck-top) + 1dvh) var(--deck-pad) calc(var(--deck-bottom) + 1dvh);
+  overflow: hidden;
+  visibility: hidden;
+}
+.deck-slide.is-on { visibility: visible; z-index: 4; }
+.deck-slide.is-leaving { visibility: visible; z-index: 1; }
+
+/* kinetic(): every letter rises from behind its own word */
+.deck-w { display: inline-block; overflow: hidden; white-space: nowrap; vertical-align: top; padding: 0.08em 0.07em 0.1em; margin: -0.08em -0.07em -0.1em; }
+.deck-ch { display: inline-block; }
+
+/* ------------------------------------------------------------ chrome */
+
+.deck-top, .deck-bottom { position: fixed; left: 0; right: 0; z-index: 10; padding: 0 var(--deck-pad); pointer-events: none; transition: opacity 0.3s var(--deck-ease); }
+.deck-top a, .deck-top button, .deck-bottom a, .deck-bottom button { pointer-events: auto; }
+.deck.is-held .deck-top, .deck.is-held .deck-bottom, .deck.is-held .deck-preview { opacity: 0; }
+.deck-top { top: 0; padding-top: max(4px, env(safe-area-inset-top)); }
+.deck-segs { display: flex; gap: 5px; }
+.deck-seg { flex: 1; min-width: 0; height: 22px; padding: 0; border: 0; background: transparent; cursor: pointer; display: flex; align-items: center; -webkit-touch-callout: none; user-select: none; }
+.deck-seg-bar { display: block; width: 100%; height: 4px; overflow: hidden; border-radius: 4px; background: var(--deck-seg-track); transition: height 0.15s var(--deck-ease); }
+.deck-seg:hover .deck-seg-bar, .deck-seg:focus-visible .deck-seg-bar { height: 7px; }
+.deck-seg:focus-visible { outline-offset: 0; border-radius: 4px; }
+.deck-seg i { display: block; height: 100%; background: var(--deck-seg-fill); transform: scaleX(0); transform-origin: 0 50%; }
+/* Paused on a slide (e.g. picked from the bar): mark it as "you are here" in its own colour. */
+.deck.is-paused .deck-seg[aria-current] .deck-seg-bar { height: 7px; background: var(--deck-seg-current); }
+.deck.is-paused .deck-seg[aria-current] i { opacity: 0; }
+.deck-top-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; }
+.deck-actions { display: flex; gap: 8px; }
+.deck-bottom { bottom: 0; display: flex; align-items: center; gap: 14px; height: var(--deck-bottom); padding-bottom: env(safe-area-inset-bottom); }
+
+.deck-chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: var(--deck-radius);
+  background: var(--deck-chip-bg);
+  color: var(--deck-chip-fg);
+  font: 700 14px/1 var(--deck-font);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: translate 0.2s var(--deck-ease), background 0.25s, color 0.25s;
+}
+.deck-chip:hover { translate: 0 -1px; }
+.deck-chip.is-primary { background: var(--deck-primary-bg); color: var(--deck-primary-fg); }
+.deck-chip.deck-icon { width: 38px; padding: 0; justify-content: center; }
+.deck-short { display: none; }
+.deck-count { flex: none; color: var(--deck-hint); font: 500 13px var(--deck-mono); font-variant-numeric: tabular-nums; }
+.deck-hint { min-width: 0; overflow: hidden; color: var(--deck-hint); font: 400 13px/1.25 var(--deck-font); text-overflow: ellipsis; white-space: nowrap; }
+
+/* ------------------------------------------------------------ segment preview */
+
+.deck-preview {
+  position: fixed;
+  z-index: 20;
+  padding: 6px 6px 8px;
+  border-radius: 12px;
+  background: var(--deck-preview-bg);
+  color: var(--deck-preview-fg);
+  box-shadow: 0 18px 40px -14px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+.deck-preview[hidden] { display: none; }
+.deck-preview-thumb { position: relative; overflow: hidden; border-radius: 7px; }
+.deck-thumb.deck-slide { position: absolute; inset: auto; left: 0; top: 0; visibility: visible; transform-origin: 0 0; pointer-events: none; }
+.deck-thumb, .deck-thumb * { animation-play-state: paused !important; transition: none !important; }
+.deck-preview-label { display: flex; align-items: baseline; gap: 8px; margin: 7px 4px 0; font: 600 13px/1.3 var(--deck-font); }
+.deck-preview-num { flex: none; font: 500 12px var(--deck-mono); }
+
+@media (max-width: 640px) {
+  .deck-chip { height: 34px; padding: 0 12px; font-size: 13px; }
+  .deck-chip.deck-icon { width: 34px; }
+  .deck-long { display: none; }
+  .deck-short { display: inline; }
+  .deck-hint { font-size: 12px; white-space: normal; }
+  .deck-bottom { gap: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deck-chip, .deck-top, .deck-bottom, .deck-seg-bar { transition: none; }
+}

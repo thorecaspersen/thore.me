@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thore Caspersen: CV</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #14161a;
+      --soft: #4a505c;
+      --rule: #d7dae0;
+      --accent: #0a5cff;
+      --paper: #ffffff;
+      --desk: #e9ebef;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-print]) { --desk: #0d0f13; }
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--desk); }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font: 400 10.2pt/1.45 'Hanken Grotesk', system-ui, sans-serif;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    ::selection { background: var(--accent); color: #fff; }
+    a { color: inherit; text-decoration-color: var(--accent); text-underline-offset: 2px; }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .bar {
+      max-width: 210mm; margin: 20px auto 0; padding: 0 16px;
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      font-size: 14px; color: var(--soft);
+    }
+    .bar a.btn {
+      background: var(--accent); color: #fff; text-decoration: none; font-weight: 700;
+      padding: 10px 16px; border-radius: 6px;
+    }
+    .bar a.btn:hover { filter: brightness(1.1); }
+
+    .sheet {
+      width: 210mm; min-height: 297mm; margin: 16px auto 40px; background: var(--paper);
+      padding: 16mm 15mm; display: grid; grid-template-columns: 52mm 1fr; column-gap: 11mm;
+      box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 12px 40px rgba(0,0,0,.14);
+    }
+    @media screen and (max-width: 800px) {
+      .sheet { width: auto; margin: 12px; padding: 20px; grid-template-columns: 1fr; font-size: 11pt; }
+    }
+
+    h1 { font-size: 27pt; line-height: 1; letter-spacing: -0.02em; font-weight: 800; margin: 0 0 4pt; }
+    .role { font-size: 11.5pt; font-weight: 500; color: var(--soft); margin: 0 0 16pt; }
+    h2 { font-size: 8.6pt; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 800; margin: 18pt 0 7pt; color: var(--accent); }
+    aside h2:first-child { margin-top: 0; }
+    .lead h2 { margin-top: 0; }
+    p { margin: 0 0 6pt; }
+    .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 8.6pt; }
+
+    aside ul, .stack { list-style: none; margin: 0; padding: 0; }
+    aside li { margin: 0 0 3pt; }
+    .skillgroup { margin-bottom: 8pt; }
+    .skillgroup b { display: block; font-size: 9pt; margin-bottom: 2pt; }
+    .skillgroup span { color: var(--soft); font-size: 9pt; }
+
+    .job { display: grid; grid-template-columns: 8mm 1fr; column-gap: 3.5mm; margin-bottom: 11pt; break-inside: avoid; }
+    .logo { display: grid; place-items: center; width: 8mm; height: 8mm; border-radius: 1.8mm; overflow: hidden; background: #fff; box-shadow: inset 0 0 0 0.6pt var(--rule); color: var(--soft); font-size: 7pt; font-weight: 800; }
+    .logo img { width: 100%; height: 100%; object-fit: cover; }
+    .logo img[src$='novo.png'] { padding: 14%; object-fit: contain; }
+    .jobhead { display: flex; justify-content: space-between; gap: 10pt; align-items: baseline; }
+    .jobhead strong { font-size: 11pt; }
+    .jobhead .mono { color: var(--soft); white-space: nowrap; }
+    .job .sub { color: var(--soft); margin: 0 0 3pt; }
+    .job ul { margin: 3pt 0 4pt; padding-left: 12pt; }
+    .job li { margin-bottom: 1.5pt; }
+    .stack { display: flex; flex-wrap: wrap; gap: 3pt 10pt; color: var(--soft); font-size: 8.6pt; }
+
+    .edu { display: grid; grid-template-columns: 7mm 1fr; column-gap: 3mm; margin-bottom: 8pt; }
+    .edu .logo { width: 7mm; height: 7mm; font-size: 5.5pt; }
+    .edu b { display: block; }
+    .edu span { color: var(--soft); font-size: 9pt; }
+
+    @page { size: A4; margin: 0; }
+    @media print {
+      html { background: var(--paper); }
+      .bar { display: none; }
+      .sheet { margin: 0; box-shadow: none; width: 210mm; min-height: 297mm; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <span>The same data as the site, laid out for paper.</span>
+    <a class="btn" href="/thore-caspersen-cv.pdf" download>Download PDF</a>
+  </div>
+  <main class="sheet" id="sheet"></main>
+
+  <script type="module">
+    import { profile, experience, education, skills, fmtMonth } from '../shared/data.js'
+
+    const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))
+    const host = (u) => u.replace(/^https?:\/\/(www\.)?/, '')
+    const logo = (name, src) => {
+      const first = name.split(/[\s,]+/)[0]
+      const ini = /^[A-Z]{2,4}$/.test(first) ? first : name.replace(/\.\w+$/, '').split(/[\s-]+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase()
+      return `<span class="logo">${src ? `<img src="${src}" alt="">` : esc(ini)}</span>`
+    }
+
+    document.getElementById('sheet').innerHTML = `
+      <aside>
+        <h2>Contact</h2>
+        <ul class="mono">
+          <li><a href="mailto:${profile.email}">${profile.email}</a></li>
+          <li><a href="${profile.site}">${host(profile.site)}</a></li>
+          <li><a href="${profile.github}">${host(profile.github)}</a></li>
+          <li><a href="${profile.linkedin}">${host(profile.linkedin)}</a></li>
+          <li>${esc(profile.location)}</li>
+        </ul>
+        <h2>Skills</h2>
+        ${Object.entries(skills).map(([group, list]) => `
+          <div class="skillgroup"><b>${esc(group)}</b><span>${list.map(([n]) => esc(n)).join(', ')}</span></div>`).join('')}
+        <h2>Education</h2>
+        ${education.map((e) => `<div class="edu">${logo(e.school, e.logo)}<div><b>${esc(e.degree)}</b><span>${esc(e.school)}, ${e.from} to ${e.to}. ${esc(e.note)}</span></div></div>`).join('')}
+      </aside>
+      <div class="lead">
+        <h1>${esc(profile.name)}</h1>
+        <p class="role">${esc(profile.title)} · ${esc(profile.tag)}</p>
+        <p>${esc(profile.bio)}</p>
+        <h2>Experience</h2>
+        ${experience.map((j) => `
+          <section class="job">
+            ${logo(j.company, j.logo)}<div>
+            <div class="jobhead"><strong>${esc(j.role)}, ${esc(j.company)}</strong><span class="mono">${j.datesApprox ? 'c. ' : ''}${fmtMonth(j.from)} to ${fmtMonth(j.to)}</span></div>
+            <p class="sub">${esc(j.place)}</p>
+            <p>${esc(j.summary)}</p>
+            <ul>${j.highlights.filter((h) => !h.startsWith('Placeholder')).map((h) => `<li>${esc(h)}</li>`).join('')}</ul>
+            <ul class="stack mono">${j.stack.map((s) => `<li>${esc(s)}</li>`).join('')}</ul>
+          </div></section>`).join('')}
+      </div>`
+  </script>
+</body>
+</html>
