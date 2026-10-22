@@ -212,7 +212,7 @@ document.addEventListener('submit', async (e) => {
   btn.lastElementChild.textContent = 'Sending…'
   const ok = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } }).then((r) => r.ok, () => false)
   if (ok) form.reset()
-  btn.lastElementChild.textContent = ok ? 'Sent. Thanks!' : 'Not sent. Try again'
+  btn.lastElementChild.textContent = ok ? 'Sent. Thanks!' : 'Failed. Retry'
   btn.disabled = false
 })
 
