@@ -439,26 +439,31 @@ button { font: inherit; color: inherit; }
   .rl-w { display: block; }
   .dt { margin-top: 0.5em; color: var(--fg3); font-size: clamp(12px, 0.2vw + 0.85dvh, 15px); line-height: 1.35; font-variant-numeric: tabular-nums; }
 
+  /* Portrait: the rail climbs from HTX at the bottom to Novo at the top. It fills the height under the heading in
+     equal slots, plus half a slot on top where the line runs on into today. */
   @media (max-aspect-ratio: 4/5) {
+    .l-rail { flex: 1; display: flex; flex-direction: column; min-height: 0; }
     .h { font-size: min(10.4vw, 5.4dvh); }
     .sub { font-size: min(4.2vw, 2.1dvh); }
-    .rail { --yr: 17px; margin-top: 2.6dvh; }
-    .rail-line, .rail-fill, .runner { left: calc(var(--node) / 2 - 0.5px); right: auto; top: 0.5em; bottom: 0; width: 1px; height: auto; }
-    .rail-line { background: linear-gradient(180deg, rgba(245, 245, 247, 0.22) 85%, transparent); }
-    .rail-fill { background: linear-gradient(180deg, rgba(245, 245, 247, 0.4), var(--fg) 85%, transparent); transform: scaleY(var(--p)); transform-origin: 50% 0; }
-    .runner { translate: 0 calc(var(--p) * 100%); }
-    .runner::before { right: auto; left: -1px; top: auto; bottom: 100%; width: 3px; height: 70px; background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.9)); }
+    .rail { --yr: 17px; flex: 1; margin-top: 2.6dvh; }
+    .rail-line, .rail-fill, .runner { left: calc(var(--node) / 2 - 0.5px); right: auto; top: 0; bottom: calc(100% / 8.5 - 0.35em - var(--node) / 2); width: 1px; height: auto; }
+    .rail-line { background: linear-gradient(0deg, rgba(245, 245, 247, 0.22) 85%, transparent); }
+    .rail-fill { background: linear-gradient(0deg, rgba(245, 245, 247, 0.4), var(--fg) 85%, transparent); transform: scaleY(var(--p)); transform-origin: 50% 100%; }
+    .runner { translate: 0 calc((1 - var(--p)) * 100%); }
+    .runner::before { right: auto; left: -1px; top: 0; width: 3px; height: 70px; background: linear-gradient(rgba(255, 255, 255, 0.9), transparent); }
     .runner::after { top: -5px; left: -5px; }
-    .stops { grid-template-columns: 1fr; gap: 1.5dvh; padding-left: 28px; }
-    .stops li { position: relative; display: grid; grid-template-columns: 3.4em 1fr; column-gap: 8px; align-items: start; }
+    .stops { display: flex; flex-direction: column-reverse; height: 100%; padding-left: 28px; }
+    .stops::after { content: ''; flex: 0.5 1 0; }
+    .stops li { position: relative; flex: 1 1 0; display: grid; grid-template-columns: 3.4em 1fr; column-gap: 8px; align-items: start; }
     .yr { height: auto; padding-top: 0.15em; }
     .node { position: absolute; left: -28px; top: 0.35em; margin: 0; }
     .stop-txt { grid-column: 2; }
     .co { font-size: min(4.4vw, 2.2dvh); }
     .co { flex-direction: row; align-items: center; gap: 0.45em; }
-    .logo { flex: none; width: 26px; border-radius: 22%; }
+    .logo { flex: none; width: min(26px, 4dvh); border-radius: 22%; }
     .logo.is-ini { font-size: 9px; }
     .rl, .dt { display: inline; margin: 0; }
+    .rl br { display: none; }
     .rl { font-size: 13px; }
     .rl-w { display: inline; }
     .rl::after { content: ' · '; color: var(--fg3); }

@@ -257,7 +257,7 @@ function career() {
           <span class="node" aria-hidden="true"></span>
           <div class="stop-txt" data-anim="lift" data-at="${at + 4}" data-cfg="glide">
             <h3 class="co">${logoTile(s)}<span>${esc(s.co)}</span></h3>
-            <p class="rl">${s.rlWords ? s.rl.split(' ').map((w) => `<span class="rl-w">${esc(w)}</span>`).join(' ') : esc(s.rl).replace(/\n/g, '<br>')}</p>
+            <p class="rl">${s.rlWords ? s.rl.split(' ').map((w) => `<span class="rl-w">${esc(w)}</span>`).join(' ') : esc(s.rl).replace(/\n/g, '<br> ')}</p>
             <p class="dt">${esc(s.dt)}</p>
           </div>
         </li>`
