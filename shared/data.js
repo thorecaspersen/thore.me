@@ -17,6 +17,8 @@ export const profile = {
   linkedin: 'https://www.linkedin.com/in/thorecaspersen',
   site: 'https://thore.me',
   cvPdf: '/thore-caspersen-cv.pdf',
+  // The contact form posts here; FormBold mails it on to an inbox that never appears on the site.
+  formbold: 'https://formbold.com/s/oyBqa',
   photo: '/thore.jpg',
   startYear: 2015,
   codingSince: 2009,

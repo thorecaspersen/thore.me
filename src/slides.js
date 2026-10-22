@@ -186,6 +186,12 @@ function next() {
   return `<div class="pg pg-next">
   ${RULES}
   <h2 class="hd" aria-label="Let’s talk"><span class="mv" data-anim="gx" data-dx="-2" data-at="6" aria-hidden="true"><span class="fit" data-deck-fit><span class="ln">let’s</span> <span class="ln">talk</span></span></span></h2>
+  <form class="msg" action="${esc(profile.formbold)}" method="POST" data-anim="fill" data-from="t" data-steps="3" data-at="10" data-deck-no-nav>
+    <label class="f-name"><span>Name</span><input name="name" autocomplete="name" required></label>
+    <label class="f-mail"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
+    <label class="f-msg"><span>Message</span><textarea name="message" required></textarea></label>
+    <button class="cta f-send" type="submit">${icon('arrow')}<span aria-live="polite">Send</span></button>
+  </form>
   <nav class="ctas" aria-label="Contact and CV">${ctas
     .map((c, i) => `<a class="cta c${i}" href="${esc(c.href)}" ${c.attrs || ''} data-anim="fill" data-from="t" data-steps="2" data-at="${16 + i * 2}">${icon(c.icon)}<span>${esc(c.label)}</span></a>`)
     .join('')}</nav>

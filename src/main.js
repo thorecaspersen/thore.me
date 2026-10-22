@@ -202,6 +202,20 @@ document.addEventListener('click', (e) => {
   }
 })
 
+/* Let's talk: the form posts to FormBold without leaving the slide, and the send button says how it went. */
+document.addEventListener('submit', async (e) => {
+  const form = e.target.closest('.msg')
+  if (!form) return
+  e.preventDefault()
+  const btn = form.querySelector('.f-send')
+  btn.disabled = true
+  btn.lastElementChild.textContent = 'Sending…'
+  const ok = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } }).then((r) => r.ok, () => false)
+  if (ok) form.reset()
+  btn.lastElementChild.textContent = ok ? 'Sent. Thanks!' : 'Not sent. Try again'
+  btn.disabled = false
+})
+
 /* AI, read more: a click opens that window's full text mid-screen and pauses the deck. The ×, a click outside it,
    Escape or leaving the slide closes it. */
 document.addEventListener('click', (e) => {
