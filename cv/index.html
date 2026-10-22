@@ -83,11 +83,11 @@
     .edu b { display: block; }
     .edu span { color: var(--soft); font-size: 9pt; }
 
-    @page { size: A4; margin: 0; }
+    @page { size: A4; margin: 16mm 0; }
     @media print {
       html { background: var(--paper); }
       .bar { display: none; }
-      .sheet { margin: 0; box-shadow: none; width: 210mm; min-height: 297mm; }
+      .sheet { margin: 0; padding-block: 0; box-shadow: none; width: 210mm; min-height: 0; }
     }
   </style>
 </head>
